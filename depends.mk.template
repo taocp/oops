@@ -1,0 +1,24 @@
+################################################################
+# Note: Edit the variable below to help find your own package
+#       that tera depends on.
+#       If you build tera using build.sh or travis.yml, it will
+#       automatically config this for you.
+################################################################
+
+SOFA_PBRPC_DIR=
+PROTOBUF_DIR=
+SNAPPY_DIR=
+GFLAGS_DIR=
+BOOST_DIR=
+
+SOFA_PBRPC_INCDIR = $(SOFA_PBRPC_DIR)/include
+PROTOBUF_INCDIR = $(PROTOBUF_DIR)/include
+SNAPPY_INCDIR = $(SNAPPY_DIR)/include
+GFLAGS_INCDIR = $(GFLAGS_DIR)/include
+
+SOFA_PBRPC_LIBDIR = $(SOFA_PBRPC_DIR)/lib
+PROTOBUF_LIBDIR = $(PROTOBUF_DIR)/lib
+SNAPPY_LIBDIR = $(SNAPPY_DIR)/lib
+GFLAGS_LIBDIR = $(GFLAGS_DIR)/lib
+
+PROTOC = $(PROTOBUF_DIR)/bin/protoc
