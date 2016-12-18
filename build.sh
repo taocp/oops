@@ -22,14 +22,13 @@ fi
 
 cd ${DEPS_SOURCE}
 
-# boost
-if [ ! -f "${FLAG_DIR}/boost_1_61_0" ] \
-    || [ ! -d "${DEPS_PREFIX}/boost_1_61_0/boost" ]; then
-	wget -O boost_1_61_0.tar.gz http://125.39.35.130/files/31800000083F2519/jaist.dl.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.gz
-    tar zxf boost_1_61_0.tar.gz
-    rm -rf ${DEPS_PREFIX}/boost_1_61_0
-    mv boost_1_61_0 ${DEPS_PREFIX}
-    touch "${FLAG_DIR}/boost_1_61_0"
+if [ ! -f "${FLAG_DIR}/boost_1_58_0"  ] \
+    || [ ! -d "${DEPS_PREFIX}/boost_1_58_0/boost"  ]; then
+    wget --no-check-certificate -O boost_1_58_0.tar.bz2 http://mirrors.163.com/gentoo/distfiles/boost_1_58_0.tar.bz2
+    tar xjf boost_1_58_0.tar.bz2 --recursive-unlink
+    rm -rf ${DEPS_PREFIX}/boost_1_58_0
+    mv boost_1_58_0 ${DEPS_PREFIX}
+    touch "${FLAG_DIR}/boost_1_58_0"
 fi
 
 # protobuf
@@ -73,13 +72,13 @@ if [ ! -f "${FLAG_DIR}/sofa-pbrpc_1_1_0" ] \
     wget --no-check-certificate -O sofa-pbrpc-1.1.0.tar.gz https://github.com/baidu/sofa-pbrpc/archive/v1.1.0.tar.gz
     tar zxf sofa-pbrpc-1.1.0.tar.gz
     cd sofa-pbrpc-1.1.0
-    sed -i '' '/BOOST_HEADER_DIR=/ d' depends.mk # for Mac
-    sed -i '' '/PROTOBUF_DIR=/ d' depends.mk
-    sed -i '' '/SNAPPY_DIR=/ d' depends.mk
-    #sed -i '/BOOST_HEADER_DIR=/ d' depends.mk  # for Linux
-    #sed -i '/PROTOBUF_DIR=/ d' depends.mk
-    #sed -i '/SNAPPY_DIR=/ d' depends.mk
-    echo "BOOST_HEADER_DIR=${DEPS_PREFIX}/boost_1_61_0" >> depends.mk
+    #sed -i '' '/BOOST_HEADER_DIR=/ d' depends.mk # for Mac
+    #sed -i '' '/PROTOBUF_DIR=/ d' depends.mk
+    #sed -i '' '/SNAPPY_DIR=/ d' depends.mk
+    sed -i '/BOOST_HEADER_DIR=/ d' depends.mk  # for Linux
+    sed -i '/PROTOBUF_DIR=/ d' depends.mk
+    sed -i '/SNAPPY_DIR=/ d' depends.mk
+    echo "BOOST_HEADER_DIR=${DEPS_PREFIX}/boost_1_58_0" >> depends.mk
     echo "PROTOBUF_DIR=${DEPS_PREFIX}" >> depends.mk
     echo "SNAPPY_DIR=${DEPS_PREFIX}" >> depends.mk
     echo "PREFIX=${DEPS_PREFIX}" >> depends.mk
@@ -123,8 +122,8 @@ cd ${WORK_DIR}
 # config depengs.mk
 ########################################
 
-sed -i '' "s:^SOFA_PBRPC_DIR=.*:SOFA_PBRPC_DIR=$DEPS_PREFIX:" depends.mk
-sed -i '' "s:^PROTOBUF_DIR=.*:PROTOBUF_DIR=$DEPS_PREFIX:" depends.mk
-sed -i '' "s:^SNAPPY_DIR=.*:SNAPPY_DIR=$DEPS_PREFIX:" depends.mk
-sed -i '' "s:^GFLAGS_DIR=.*:GFLAGS_DIR=$DEPS_PREFIX:" depends.mk
-sed -i '' "s:^BOOST_DIR=.*:BOOST_DIR=$DEPS_PREFIX/boost_1_61_0:" depends.mk
+sed -i  "s:^SOFA_PBRPC_DIR=.*:SOFA_PBRPC_DIR=$DEPS_PREFIX:" depends.mk
+sed -i  "s:^PROTOBUF_DIR=.*:PROTOBUF_DIR=$DEPS_PREFIX:" depends.mk
+sed -i  "s:^SNAPPY_DIR=.*:SNAPPY_DIR=$DEPS_PREFIX:" depends.mk
+sed -i  "s:^GFLAGS_DIR=.*:GFLAGS_DIR=$DEPS_PREFIX:" depends.mk
+sed -i  "s:^BOOST_DIR=.*:BOOST_DIR=$DEPS_PREFIX/boost_1_61_0:" depends.mk
