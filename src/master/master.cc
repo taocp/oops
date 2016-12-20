@@ -1,13 +1,18 @@
 #include <signal.h>
 #include <unistd.h>
 
+#include <functional>
 #include <iostream>
+#include <vector>
 
 #include <gflags/gflags.h>
 #include <sofa/pbrpc/pbrpc.h>
 
+#include "common/thread_pool.h"
+
 #include "master.pb.h"
 
+DECLARE_int32(taocipian_master_task_pool_thread_num);
 DECLARE_string(taocipian_master_hostname);
 DECLARE_string(taocipian_master_port);
 
@@ -17,27 +22,41 @@ namespace master {
 class MasterImpl : public taocipian::master::MasterServer
 {
 public:
-    MasterImpl() {}
-    virtual ~MasterImpl() {}
+    MasterImpl():
+     task_pool_(new ::common::ThreadPool(FLAGS_taocipian_master_task_pool_thread_num)) {}
+    ~MasterImpl() {}
 
 private:
-    virtual void Echo(google::protobuf::RpcController* controller,
-                      const taocipian::master::EchoRequest* request,
-                      taocipian::master::EchoResponse* response,
-                      google::protobuf::Closure* done) {
+    void DoEcho(const taocipian::master::EchoRequest* request,
+                taocipian::master::EchoResponse* response,
+                google::protobuf::Closure* done);
+    void Echo(google::protobuf::RpcController* controller,
+              const taocipian::master::EchoRequest* request,
+              taocipian::master::EchoResponse* response,
+              google::protobuf::Closure* done) {
         sofa::pbrpc::RpcController* cntl = static_cast<sofa::pbrpc::RpcController*>(controller);
-        // XXX handles request in master-thread-pool instead of rpc-thread-pool
         std::cout << "Echo for " << cntl->RemoteAddress() << std::endl;
-        response->set_message("echo message: " + request->message());
-        done->Run();
+        auto task = std::bind(&MasterImpl::DoEcho, this, request, response, done);
+        task_pool_->AddTask(task);
     }
 
-    // ThreadPool* pool_;
+    ::common::ThreadPool* task_pool_;
 };
+
+void MasterImpl::DoEcho(const taocipian::master::EchoRequest* request,
+                        taocipian::master::EchoResponse* response,
+                        google::protobuf::Closure* done) {
+    response->set_message("echo message: " + request->message());
+    done->Run();
+}
 
 } // namespace master
 } // namespace taocipian
 
+
+void DoEcho(const taocipian::master::EchoRequest* request,
+                taocipian::master::EchoResponse* response,
+                google::protobuf::Closure* done);
 bool thread_init_func()
 {
     return true;

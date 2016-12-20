@@ -3,6 +3,7 @@ project (oops)
 
 include_directories(thirdparty/include thirdparty/boost_1_58_0 . src src/proto)
 
+set(CMAKE_CXX_STANDARD 11)
 set(OOPS_LINK_LIBS libsofa-pbrpc.a libgflags.a libprotobuf.a libsnappy.a)
 link_directories(thirdparty/lib/)
 
