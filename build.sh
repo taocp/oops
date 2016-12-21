@@ -91,16 +91,16 @@ if [ ! -f "${FLAG_DIR}/sofa-pbrpc_1_1_0" ] \
     touch "${FLAG_DIR}/sofa-pbrpc_1_1_0"
 fi
 
-# cmake for gflags
-if [ ! -f "${DEPS_PREFIX}/bin/cmake" ] ; then
-    wget --no-check-certificate -O CMake-3.2.1.tar.gz http://github.com/Kitware/CMake/archive/v3.2.1.tar.gz
-    tar zxf CMake-3.2.1.tar.gz
-    cd CMake-3.2.1
-    ./configure --prefix=${DEPS_PREFIX}
-    make -j4
-    make install
-    cd -
-fi
+## cmake for gflags
+#if [ ! -f "${DEPS_PREFIX}/bin/cmake" ] ; then
+#    wget --no-check-certificate -O CMake-3.2.1.tar.gz http://github.com/Kitware/CMake/archive/v3.2.1.tar.gz
+#    tar zxf CMake-3.2.1.tar.gz
+#    cd CMake-3.2.1
+#    ./configure --prefix=${DEPS_PREFIX}
+#    make -j4
+#    make install
+#    cd -
+#fi
 
 # gflags
 if [ ! -f "${FLAG_DIR}/gflags_2_1_1" ] \
@@ -126,4 +126,4 @@ sed -i  "s:^SOFA_PBRPC_DIR=.*:SOFA_PBRPC_DIR=$DEPS_PREFIX:" depends.mk
 sed -i  "s:^PROTOBUF_DIR=.*:PROTOBUF_DIR=$DEPS_PREFIX:" depends.mk
 sed -i  "s:^SNAPPY_DIR=.*:SNAPPY_DIR=$DEPS_PREFIX:" depends.mk
 sed -i  "s:^GFLAGS_DIR=.*:GFLAGS_DIR=$DEPS_PREFIX:" depends.mk
-sed -i  "s:^BOOST_DIR=.*:BOOST_DIR=$DEPS_PREFIX/boost_1_61_0:" depends.mk
+sed -i  "s:^BOOST_DIR=.*:BOOST_DIR=$DEPS_PREFIX/boost_1_58_0:" depends.mk

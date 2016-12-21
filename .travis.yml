@@ -1,0 +1,27 @@
+sudo: required
+language: cpp
+compiler: g++
+
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - g++-4.8
+
+before_install:
+    - ulimit -c unlimited -S
+    - ulimit -a
+    - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-4.8 /usr/bin/gcc
+    - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-4.8 /usr/bin/g++
+
+install:
+    - if [ "$CC" = "gcc"  ]; then export CC="gcc-4.8"; fi
+    - if [ "$CXX" = "g++"  ]; then export CXX="g++-4.8"; fi
+    - sh build.sh
+
+script:
+    - mkdir build
+    - cd build
+    - cmake ..
+    - VERBOSE=1 make -j4
