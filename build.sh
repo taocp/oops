@@ -130,17 +130,17 @@ if [ ! -f "${FLAG_DIR}/glog_-0_3_3"  ] \
 fi
 
 # libunwind for gperftools
-if [ ! -f "${FLAG_DIR}/libunwind_0_99_beta"  ] \
+if [ ! -f "${FLAG_DIR}/libunwind_0_98_5"  ] \
 	|| [ ! -f "${DEPS_PREFIX}/lib/libunwind.a"  ] \
 	|| [ ! -f "${DEPS_PREFIX}/include/libunwind.h"  ]; then
-	wget http://mirrors.163.com/gentoo/distfiles/libunwind-0.99.tar.gz
-	tar xzf libunwind-0.99.tar.gz
-	cd libunwind-0.99
+	wget  --no-check-certificate http://mirrors.163.com/gentoo/distfiles/libunwind-0.98.5.tar.gz
+	tar xzf libunwind-0.98.5.tar.gz
+	cd libunwind-0.98.5
 	./configure ${DEPS_CONFIG}
 	make CFLAGS=-fPIC -j4
 	make CFLAGS=-fPIC install
 	cd -
-	touch "${FLAG_DIR}/libunwind_0_99_beta"
+	touch "${FLAG_DIR}/libunwind_0_98_5"
 fi
 
 # gperftools (tcmalloc)
